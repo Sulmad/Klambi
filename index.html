@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLAMBI by sulistiowati - Boutique & Style</title>
+    <style>
+        :root { 
+            --primary: #d4a373; /* Gold/Bronze */
+            --dark: #1a1a1a; 
+            --light: #fefae0; 
+            --accent: #bc6c25;
+            --white: #ffffff;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+        body { background: #faf9f6; color: var(--dark); overflow-x: hidden; }
+
+        /* HEADER */
+        header { background: var(--white); height: 80px; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo a { font-size: 1.6rem; font-weight: 800; text-decoration: none; color: var(--dark); letter-spacing: -1px; }
+        .logo span { color: var(--primary); font-weight: 300; font-style: italic; font-size: 1rem; }
+        
+        .nav-links { display: flex; list-style: none; gap: 30px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        .nav-icons { display: flex; align-items: center; gap: 20px; }
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 1.5rem; }
+        #cart-count { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
+        .menu-toggle { display: none; cursor: pointer; font-size: 1.5rem; }
+
+        /* BANNER */
+        .slideshow-container { max-width: 1200px; margin: 20px auto; position: relative; border-radius: 20px; overflow: hidden; height: 450px; }
+        .mySlides { display: none; height: 100%; }
+        .mySlides img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        .slideshow-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; width: 80%; }
+        .slideshow-text h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+
+        /* KATALOG */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; padding-bottom: 10px; font-style: italic; }
+        .section-title h2::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background: var(--primary); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .card { background: var(--white); border-radius: 15px; padding: 15px; transition: 0.4s; border: 1px solid #f0f0f0; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.07); }
+        .card img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; cursor: pointer; }
+        .card-info { padding: 15px 0; text-align: center; }
+        .price { color: var(--accent); font-weight: 700; font-size: 1.2rem; margin: 10px 0; }
+        .add-btn { width: 100%; padding: 12px; background: var(--dark); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .add-btn:hover { background: var(--primary); }
+
+        /* ABOUT ME SECTION */
+        .about-me-section { padding: 80px 0; background: #fff; border-top: 1px solid #eee; }
+        .about-me-flex { display: flex; align-items: center; gap: 60px; flex-wrap: wrap; }
+        .about-me-image { flex: 1; min-width: 300px; }
+        .about-me-image img { width: 100%; border-radius: 20px; box-shadow: 15px 15px 0px var(--primary); }
+        .about-me-content { flex: 1.2; min-width: 300px; }
+        .sub-title { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; display: block; }
+        .about-me-content h2 { font-size: 2.5rem; margin-bottom: 20px; font-style: italic; }
+        .about-me-content p { line-height: 1.8; color: #666; margin-bottom: 20px; }
+        .about-stats { display: flex; gap: 40px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+
+        /* SIDEBAR & MODAL */
+        .sidebar { position: fixed; right: -100%; top: 0; width: 400px; max-width: 90%; height: 100%; background: white; z-index: 2000; transition: 0.4s; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .sidebar.active { right: 0; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .cart-item { display: flex; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 15px; align-items: center; }
+        .cart-item img { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; }
+        .qty-ctrl { display: flex; align-items: center; gap: 10px; background: white; padding: 5px 10px; border-radius: 20px; border: 1px solid #ddd; }
+        .qty-btn { border: none; background: none; color: var(--primary); cursor: pointer; font-weight: bold; }
+        
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 20px; max-width: 700px; position: relative; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 2rem; cursor: pointer; color: #aaa; }
+        .detail-flex { display: flex; gap: 30px; flex-wrap: wrap; }
+        .input-field { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; border-radius: 8px; }
+
+        /* FLYING IMAGE ANIMATION */
+        .flying-img { position: fixed; z-index: 9999; object-fit: cover; border-radius: 50%; transition: all 0.8s cubic-bezier(0.42, 0, 0.58, 1); pointer-events: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        /* FOOTER */
+        footer { background: var(--dark); color: white; padding: 50px 20px; text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; list-style: none; margin: 20px 0; }
+        .footer-links a { color: #888; text-decoration: none; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { position: absolute; top: 80px; left: -100%; width: 100%; flex-direction: column; background: white; padding: 20px; box-shadow: 0 10px 10px rgba(0,0,0,0.05); }
+            .nav-links.active { left: 0; }
+            .menu-toggle { display: block; }
+            .slideshow-container { height: 300px; }
+            .about-me-flex { flex-direction: column; text-align: center; }
+            .about-me-image img { box-shadow: 10px 10px 0px var(--primary); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><a href="#">KLAMBI<span> by sulistiowati</span></a></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#katalog">Koleksi</a></li>
+                <li><a href="klambi.html">Cek keaslian produk</a></li>
+                <li><a href="Aboutme.html">Tentang Kami</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="cart-wrapper" onclick="openCart()">👜 <span id="cart-count">0</span></div>
+                <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=500&fit=crop">
+            <div class="slideshow-text"><h1>KLAMBI Collection</h1><p>Keanggunan dalam setiap jahitan</p></div>
+        </div>
+        <div class="mySlides fade">
+            <img src="https://images.unsplash.com/photo-1445205174273-59396b404918?w=1200&h=500&fit=crop">
+            <div class="slideshow-text"><h1>Premium Quality</h1><p>Bahan terbaik untuk kenyamanan Anda</p></div>
+        </div>
+    </div>
+
+    <section class="container" id="katalog">
+        <div class="section-title"><h2>Signature Collection</h2></div>
+        <div class="product-grid" id="product-container"></div>
+    </section>
+
+    <section id="about" class="about-me-section">
+        <div class="container">
+            <div class="about-me-flex">
+                <div class="about-me-image">
+                    <img src="img/sulistiowati.jpg" alt="Sulistiowati">
+                </div>
+                <div class="about-me-content">
+                    <span class="sub-title">Sosok di Balik Brand</span>
+                    <h2>Sulistiowati</h2>
+                    <p>Halo, saya Sulistiowati. Saya percaya bahwa setiap wanita berhak merasa cantik dan percaya diri. Melalui KLAMBI, saya ingin menghadirkan busana yang tidak hanya indah dipandang, tapi juga nyaman saat dikenakan di segala suasana.</p>
+                    <p>Setiap koleksi kami pilih dengan cinta, dedikasi, dan perhatian pada detail kualitas bahan terbaik.</p>
+                    <div class="about-stats">
+                        <div class="stat"><h3>100%</h3><p>Bahan Premium</p></div>
+                        <div class="stat"><h3>Tersertifikasi</h3><p>Kualitas Butik</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo"><a href="#" style="color:white">KLAMBI<span> by sulistiowati</span></a></div>
+        <ul class="footer-links">
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">WhatsApp</a></li>
+        </ul>
+        <p style="color:#444; font-size:0.8rem">&copy; 2025 KLAMBI by sulistiowati. All Rights Reserved.</p>
+    </footer>
+
+    <div id="detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDetail()">&times;</span>
+            <div class="detail-flex">
+                <div style="flex:1"><img id="modal-img" src="" style="width:100%; border-radius:15px;"></div>
+                <div style="flex:1.2">
+                    <h2 id="modal-nama"></h2>
+                    <p id="modal-harga" class="price" style="font-size:1.5rem"></p>
+                    <p id="modal-deskripsi" style="line-height:1.6; color:#666"></p>
+                    <div id="modal-btn-container" style="margin-top:20px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-sidebar" class="sidebar">
+        <div class="sidebar-header"><h3>Keranjang Belanja</h3><span onclick="closeCart()" style="cursor:pointer">×</span></div>
+        <div id="cart-items-list" class="cart-body"></div>
+        <div class="sidebar-footer">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:15px">
+                <span>Total:</span> <span id="total-price">Rp 0</span>
+            </div>
+            <button class="add-btn" onclick="openCheckoutModal()" style="background:var(--accent)">Selesaikan Pesanan</button>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content" style="max-width:400px">
+            <span class="close" onclick="closeCheckout()">&times;</span>
+            <h3>Data Pengiriman</h3>
+            <input type="text" id="cust-name" placeholder="Nama Anda" class="input-field">
+            <textarea id="cust-address" placeholder="Alamat Lengkap" class="input-field" style="height:100px"></textarea>
+            <button class="add-btn" onclick="sendToWA()" style="background:#25d366; margin-top:15px">Kirim via WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        const db_produk = [
+            { id: 1, nama: "Gamis Silk Aaliyah", harga: 345000, img: "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=500", desc: "Gamis berbahan silk premium yang sangat jatuh dan adem. Mewah untuk acara formal." },
+            { id: 2, nama: "Blouse Kirana", harga: 175000, img: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=500", desc: "Blouse trendy dengan motif floral lembut. Nyaman untuk dipakai seharian." },
+            { id: 3, nama: "Hijab Pashmina", harga: 55000, img: "https://images.unsplash.com/photo-1609171712499-07f910f54546?w=500", desc: "Pashmina mudah dibentuk dan tegak di dahi. Tersedia berbagai warna pastel." },
+            { id: 4, nama: "Outer Lace Syifa", harga: 285000, img: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500", desc: "Outer berbahan lace eksklusif yang memberikan kesan anggun seketika." }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('klambi_cart')) || [];
+
+        function renderProduk() {
+            const container = document.getElementById('product-container');
+            container.innerHTML = db_produk.map(p => `
+                <div class="card">
+                    <img src="${p.img}" onclick="openDetail(${p.id})">
+                    <div class="card-info">
+                        <h3 onclick="openDetail(${p.id})">${p.nama}</h3>
+                        <p class="price">Rp ${p.harga.toLocaleString('id-ID')}</p>
+                        <button class="add-btn" onclick="addToCart(${p.id}, event)">Beli Sekarang</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id, event) {
+            const item = db_produk.find(p => p.id === id);
+            cart.push(item);
+            
+            // Animasi Fly
+            const btn = event.currentTarget;
+            const imgToFly = btn.closest('.card').querySelector('img');
+            const cartIcon = document.querySelector('.cart-wrapper');
+            const flyingImg = document.createElement('img');
+            flyingImg.src = imgToFly.src;
+            flyingImg.classList.add('flying-img');
+            const rect = imgToFly.getBoundingClientRect();
+            flyingImg.style.left = rect.left + 'px';
+            flyingImg.style.top = rect.top + 'px';
+            flyingImg.style.width = rect.width + 'px';
+            flyingImg.style.height = rect.height + 'px';
+            document.body.appendChild(flyingImg);
+
+            const cartRect = cartIcon.getBoundingClientRect();
+            setTimeout(() => {
+                flyingImg.style.left = (cartRect.left) + 'px';
+                flyingImg.style.top = (cartRect.top) + 'px';
+                flyingImg.style.width = '20px';
+                flyingImg.style.height = '20px';
+                flyingImg.style.opacity = '0.5';
+            }, 10);
+
+            setTimeout(() => {
+                flyingImg.remove();
+                saveAndRefresh();
+            }, 800);
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('klambi_cart', JSON.stringify(cart));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cart-items-list');
+            const grouped = cart.reduce((acc, i) => {
+                const f = acc.find(x => x.id === i.id);
+                if (f) f.qty++; else acc.push({...i, qty:1});
+                return acc;
+            }, []);
+
+            list.innerHTML = grouped.map(item => `
+                <div class="cart-item">
+                    <img src="${item.img}">
+                    <div style="flex:1"><h5>${item.nama}</h5><p>Rp ${item.harga.toLocaleString()}</p></div>
+                    <div class="qty-ctrl">
+                        <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((s, i) => s + i.harga, 0);
+            document.getElementById('total-price').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function changeQty(id, delta) {
+            if (delta === 1) cart.push(db_produk.find(p => p.id === id));
+            else { const i = cart.findLastIndex(p => p.id === id); if(i !== -1) cart.splice(i, 1); }
+            saveAndRefresh();
+        }
+
+        function openDetail(id) {
+            const p = db_produk.find(x => x.id === id);
+            document.getElementById('modal-img').src = p.img;
+            document.getElementById('modal-nama').innerText = p.nama;
+            document.getElementById('modal-harga').innerText = `Rp ${p.harga.toLocaleString()}`;
+            document.getElementById('modal-deskripsi').innerText = p.desc;
+            document.getElementById('modal-btn-container').innerHTML = `<button class="add-btn" onclick="addToCart(${p.id}, event); closeDetail();">Tambah Ke Keranjang</button>`;
+            document.getElementById('detail-modal').style.display = 'block';
+        }
+
+        function sendToWA() {
+            const nama = document.getElementById('cust-name').value;
+            const alamat = document.getElementById('cust-address').value;
+            if(!nama || !alamat) return alert("Mohon lengkapi data Anda!");
+            
+            let pesan = `*ORDER BARU - KLAMBI by sulistiowati*\n\n`;
+            pesan += `👤 Nama: ${nama}\n📍 Alamat: ${alamat}\n\n*Pesanan:*\n`;
+            
+            const counts = {}; cart.forEach(i => counts[i.nama] = (counts[i.nama] || 0) + 1);
+            let total = 0;
+            Object.keys(counts).forEach(k => {
+                const p = cart.find(x => x.nama === k);
+                pesan += `- ${k} (x${counts[k]}) : Rp ${(p.harga * counts[k]).toLocaleString()}\n`;
+                total += (p.harga * counts[k]);
+            });
+            pesan += `\n*TOTAL: Rp ${total.toLocaleString()}*`;
+            
+            window.open(`https://api.whatsapp.com/send?phone=62895340194398&text=${encodeURIComponent(pesan)}`, '_blank');
+        }
+
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+        function openCart() { document.getElementById('cart-sidebar').classList.add('active'); }
+        function closeCart() { document.getElementById('cart-sidebar').classList.remove('active'); }
+        function closeDetail() { document.getElementById('detail-modal').style.display = 'none'; }
+        function openCheckoutModal() { if(cart.length > 0) document.getElementById('checkout-modal').style.display = 'block'; }
+        function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
+
+        let slideIdx = 0;
+        function autoSlide() {
+            let slides = document.getElementsByClassName("mySlides");
+            for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+            slideIdx++; if (slideIdx > slides.length) slideIdx = 1;
+            slides[slideIdx-1].style.display = "block";
+            setTimeout(autoSlide, 5000);
+        }
+
+        window.onload = () => { renderProduk(); updateUI(); autoSlide(); };
+    </script>
+</body>
+</html>
