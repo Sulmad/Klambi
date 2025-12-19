@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Website | KLAMBI by sulistiowati</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50; /* Navy Luxury */
+            --accent: #b8860b;  /* Gold */
+            --bg: #fdfaf5;      /* Cream */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg); color: var(--primary); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- NAVBAR --- */
+        header { background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .logo { font-size: 20px; font-weight: bold; letter-spacing: 2px; }
+        .logo span { color: var(--accent); font-weight: normal; font-style: italic; }
+        
+        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links a { 
+            text-decoration: none; color: var(--primary); font-size: 12px; 
+            font-weight: bold; text-transform: uppercase; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        .menu-icon { display: none; cursor: pointer; font-size: 24px; }
+
+        /* --- HERO --- */
+        .hero { padding: 80px 0; text-align: center; background: #fff; }
+        .hero h1 { font-size: 40px; margin-bottom: 15px; }
+        .hero p { font-style: italic; color: #666; max-width: 600px; margin: 0 auto; }
+
+        /* --- VERIFIKASI SECTION --- */
+        .verify-section { padding: 80px 0; }
+        .verify-card { 
+            background: #fff; max-width: 700px; margin: 0 auto; padding: 40px; 
+            border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;
+            border: 1px solid #f1e6d0;
+        }
+        
+        .input-group { margin: 30px 0; }
+        input[type="text"] { 
+            width: 100%; max-width: 400px; padding: 15px; border: 1px solid #ddd; 
+            font-size: 18px; text-align: center; letter-spacing: 3px; margin-bottom: 20px;
+            outline: none; text-transform: uppercase;
+        }
+        
+        .btn-verify { 
+            background: var(--primary); color: #fff; padding: 15px 40px; border: none; 
+            cursor: pointer; text-transform: uppercase; font-weight: bold; width: 100%; max-width: 400px;
+            transition: 0.3s;
+        }
+        .btn-verify:hover { background: var(--accent); transform: translateY(-2px); }
+
+        /* --- HASIL VERIFIKASI --- */
+        #resultArea { display: none; margin-top: 30px; animation: fadeIn 0.5s; }
+        .product-info { display: flex; align-items: center; gap: 20px; text-align: left; margin: 20px 0; border: 1px solid #eee; padding: 15px; border-radius: 8px; }
+        .product-info img { width: 120px; height: 160px; object-fit: cover; border-radius: 5px; }
+        .success-text { color: #155724; font-weight: bold; }
+        .error-text { color: #721c24; font-weight: bold; }
+
+        /* --- TENTANG SAYA --- */
+        .about-section { padding: 80px 0; background: #fff; }
+        .about-flex { display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
+        .about-text { flex: 1.2; }
+        .about-image { flex: 1; }
+        .about-image img { width: 100%; border-radius: 10px; box-shadow: 15px 15px 0 var(--accent); }
+
+        /* --- LOADING --- */
+        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- FOOTER --- */
+        footer { padding: 40px 0; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links { display: none; flex-direction: column; width: 100%; position: absolute; top: 60px; left: 0; background: #fff; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+            .nav-links.active { display: flex; }
+            .menu-icon { display: block; }
+            .about-flex { flex-direction: column; text-align: center; }
+            .product-info { flex-direction: column; text-align: center; }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><a href="#">KLAMBI<span> by sulistiowati</span></a></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#katalog">Koleksi</a></li>
+                <li><a href="klambi.html">Cek keaslian produk</a></li>
+                <li><a href="Aboutme.html">Tentang Kami</a></li>
+            </ul>
+            <div class="nav-icons">
+                
+                <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            </div>
+        </div>
+    </header>
+
+<section class="hero">
+    <div class="container">
+        <h1>Keanggunan yang Autentik</h1>
+        <p>"Menenun dedikasi dalam setiap benang, menghadirkan kemewahan yang nyata."</p>
+    </div>
+</section>
+
+<section class="verify-section" id="verifikasi">
+    <div class="container">
+        <div class="verify-card">
+            <h2>Cek Keaslian Produk</h2>
+            <p style="font-size:14px; color:#888;">Masukkan kode unik pada hangtag baju Anda.</p>
+            
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="KLB-XXXX">
+                <button onclick="cekKeaslian()" class="btn-verify">Verifikasi Sekarang</button>
+            </div>
+
+            <div id="loader" class="loader"></div>
+
+            <div id="resultArea">
+                <div id="iconResult" style="font-size: 40px;"></div>
+                <h3 id="titleResult"></h3>
+                
+                <div id="prodCard" class="product-info" style="display: none;">
+                    <img id="prodImg" src="" alt="Produk">
+                    <div>
+                        <h4 id="prodName"></h4>
+                        <p id="prodDesc" style="font-size: 13px; color: #666; margin: 5px 0;"></p>
+                        <button onclick="downloadPDF()" style="background:var(--accent); color:#fff; border:none; padding:8px 15px; cursor:pointer; font-size:11px; margin-top:10px;">UNDUH SERTIFIKAT PDF</button>
+                    </div>
+                </div>
+
+                <p id="msgResult" style="font-size: 14px; margin-top: 15px;"></p>
+                <button id="btnUlang" onclick="ulang()" style="display:none; background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline; margin-top:20px;">Cek Kode Lainnya</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section" id="tentang">
+    <div class="container about-flex">
+        <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500" alt="Sulistiowati">
+        </div>
+        <div class="about-text">
+            <h2>Tentang Sulistiowati</h2>
+            <p>Sebagai perancang busana, keahlian saya terletak pada pemilihan material premium dan ketelitian pola yang memastikan kenyamanan serta estetika tinggi.</p>
+            <p>Setiap karya <strong>KLAMBI by sulistiowati</strong> dilengkapi dengan sertifikat digital sebagai jaminan bahwa Anda memiliki produk autentik hasil dedikasi seni kami.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 KLAMBI by sulistiowati. All Rights Reserved.</p>
+    </div>
+</footer>
+<script src="script-db-verify.js"></script>
+
+</body>
+</html>
